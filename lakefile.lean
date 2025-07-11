@@ -12,4 +12,7 @@ lean_exe «ledger-gravity» where
   root := `Main
 
 require mathlib from git
-  "https://github.com/leanprover-community/mathlib4.git"
+  "https://github.com/leanprover-community/mathlib4.git" @ "v4.11.0"
+
+require RecognitionScience from git
+  "https://github.com/jonwashburn/ledger-foundation.git"

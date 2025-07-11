@@ -7,13 +7,13 @@ import Mathlib.Analysis.SpecialFunctions.Sqrt
 import LedgerGravity.GravityCore
 
 -- Characteristic acceleration scale
-def a_characteristic : ℝ := 1.2e-10  -- m/s²
+noncomputable def a_characteristic : ℝ := 1.2 * 10^(-10 : ℝ)  -- m/s²
 
 -- Dynamical time as function of radius and acceleration
-def T_dyn (r : ℝ) (a : ℝ) : ℝ := 2 * Real.pi * Real.sqrt (r / a)
+noncomputable def T_dyn (r : ℝ) (a : ℝ) : ℝ := 2 * Real.pi * Real.sqrt (r / a)
 
 -- Deep MOND limit
-def deep_MOND_limit (a : ℝ) : ℝ := Real.sqrt (a * a_characteristic)
+noncomputable def deep_MOND_limit (a : ℝ) : ℝ := Real.sqrt (a * a_characteristic)
 
 -- Acceleration scale is positive
 theorem a_characteristic_pos : a_characteristic > 0 := by

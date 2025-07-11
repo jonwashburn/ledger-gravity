@@ -2,21 +2,21 @@
 -- Quantum-gravity interface and collapse criteria
 
 import Mathlib.Data.Real.Basic
-import Mathlib.Analysis.SpecialFunctions.Log
+import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import LedgerGravity.GravityCore
 
 -- Planck constant
-def h_bar : ℝ := 1.055e-34  -- J⋅s
+noncomputable def h_bar : ℝ := 1.055 * 10^(-34 : ℝ)  -- J⋅s
 
 -- Planck length
-def l_Planck : ℝ := Real.sqrt (h_bar * G / c^3)
+noncomputable def l_Planck : ℝ := Real.sqrt (h_bar * G / c^3)
 
 -- Information content of coherent state
-def I_coherent (n : ℕ) (epsilon : ℝ) : ℝ :=
+noncomputable def I_coherent (n : ℕ) (epsilon : ℝ) : ℝ :=
   n^2 * Real.log (1 / epsilon) / Real.log 2
 
 -- Information content of classical state
-def I_classical (n : ℕ) (delta_p : ℝ) : ℝ :=
+noncomputable def I_classical (n : ℕ) (delta_p : ℝ) : ℝ :=
   Real.log n / Real.log 2 + Real.log (1 / delta_p) / Real.log 2
 
 -- Collapse criterion
@@ -24,7 +24,7 @@ def collapse_criterion (n : ℕ) (epsilon delta_p : ℝ) : Prop :=
   I_coherent n epsilon ≥ I_classical n delta_p
 
 -- Born rule probability
-def born_probability (c_k : ℝ) : ℝ := c_k^2
+noncomputable def born_probability (c_k : ℝ) : ℝ := c_k^2
 
 -- Quantum collapse theorem
 theorem quantum_collapse_occurs (n : ℕ) (epsilon delta_p : ℝ)
@@ -63,7 +63,7 @@ theorem born_rule_optimal (c_k : ℝ) (hc : c_k ≥ 0) :
   rfl
 
 -- Bandwidth cost of maintaining coherence
-def coherence_cost (n : ℕ) : ℝ := n^2 * E_coh
+noncomputable def coherence_cost (n : ℕ) : ℝ := n^2 * E_coh
 
 -- Theorem: Coherence cost grows quadratically
 theorem coherence_cost_quadratic (n : ℕ) :
@@ -72,7 +72,7 @@ theorem coherence_cost_quadratic (n : ℕ) :
   rfl
 
 -- Quantum-gravity coupling
-def quantum_gravity_coupling (phi : ℝ) : ℝ :=
+noncomputable def quantum_gravity_coupling (phi : ℝ) : ℝ :=
   G * h_bar * phi / c^3
 
 -- Planck scale constraint
