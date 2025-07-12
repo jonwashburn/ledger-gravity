@@ -31,33 +31,57 @@ theorem T_dyn_decreases_with_a (r : ℝ) (a₁ a₂ : ℝ) (hr : r > 0) (ha₁ :
   intro h
   unfold T_dyn
   -- T_dyn ∝ 1/√a, so larger a gives smaller T_dyn
-  sorry
+  -- We need to show: 2π√(r/a₁) > 2π√(r/a₂)
+  -- This is equivalent to: √(r/a₁) > √(r/a₂)
+  -- Which is equivalent to: r/a₁ > r/a₂
+  -- Which is equivalent to: 1/a₁ > 1/a₂
+  -- Which is equivalent to: a₂ > a₁ (since a₁, a₂ > 0)
+  apply mul_lt_mul_of_pos_left
+  · apply Real.sqrt_lt_sqrt
+    · apply div_pos hr ha₂
+    · apply div_lt_div_of_pos_left hr ha₁ ha₂ h
+  · apply mul_pos
+    · exact Real.two_pi_pos
+    · norm_num
 
 -- High acceleration leads to small dynamical time
 theorem high_acceleration_small_Tdyn (a r : ℝ) (hr : r > 0) (ha : a > 100 * a_characteristic) :
   T_dyn r a < T_dyn r (100 * a_characteristic) := by
   -- Follows from T_dyn_decreases_with_a
-  sorry
+  apply T_dyn_decreases_with_a r (100 * a_characteristic) a hr
+  · apply mul_pos (by norm_num) a_characteristic_pos
+  · exact mul_pos (by norm_num) a_characteristic_pos
+  · exact ha
 
 -- Low acceleration leads to large dynamical time
 theorem low_acceleration_large_Tdyn (a r : ℝ) (hr : r > 0) (ha_pos : a > 0) (ha : a < 0.01 * a_characteristic) :
   T_dyn r a > T_dyn r (0.01 * a_characteristic) := by
   -- Follows from T_dyn_decreases_with_a
-  sorry
+  apply T_dyn_decreases_with_a r a (0.01 * a_characteristic) hr ha_pos
+  · apply mul_pos (by norm_num) a_characteristic_pos
+  · exact ha
 
 -- Deep MOND scaling relationship
 theorem deep_MOND_scaling (a : ℝ) (ha : a > 0) :
   deep_MOND_limit a = Real.sqrt a * Real.sqrt a_characteristic := by
   unfold deep_MOND_limit
   -- √(a * a_characteristic) = √a * √a_characteristic
-  sorry
+  exact Real.sqrt_mul (mul_nonneg (le_of_lt ha) (le_of_lt a_characteristic_pos))
 
 -- Recognition weight increases with dynamical time
 theorem recognition_weight_increases (r : ℝ) (T₁ T₂ : ℝ) (hT₁ : T₁ > 0) (hT₂ : T₂ > T₁) :
   recognition_weight r T₁ < recognition_weight r T₂ := by
   unfold recognition_weight
   -- Recognition weight is monotonic in T_dyn
-  sorry
+  apply add_lt_add_left
+  apply mul_lt_mul_of_pos_left
+  · apply Real.rpow_lt_rpow_of_exponent_lt
+    · exact div_pos hT₁ τ₀_derived_pos
+    · exact hT₂
+    · exact one_div_pos.mpr φ_derived_properties.1
+  · apply div_pos
+    · exact sub_pos.mpr φ_derived_properties.1
+    · apply mul_pos (by norm_num) φ_derived_properties.1
 
 -- Bandwidth constraint theorem using foundation-derived constants
 theorem bandwidth_constraint (r : ℝ) (M : ℝ) (hr : r > 0) (hM : M > 0) :
@@ -66,7 +90,7 @@ theorem bandwidth_constraint (r : ℝ) (M : ℝ) (hr : r > 0) (hM : M > 0) :
   unfold recognition_weight T_dyn B_total_derived E_coh_derived
   -- The recognition weight is bounded by the physical constraint
   -- that total bandwidth cannot exceed the cosmic limit
-  sorry  -- Complex numerical constraint
+  sorry  -- Placeholder: Requires astrophysical bounds and inequalities from foundations
 
 -- Master theorem: All acceleration scales emerge from foundations
 theorem acceleration_scales_from_foundations : meta_principle_holds →
@@ -90,6 +114,8 @@ theorem acceleration_scales_from_foundations : meta_principle_holds →
         unfold T_dyn
         -- T_dyn r a = 2π√(r/a) where a = GM/r²
         -- So T_dyn r (GM/r²) = 2π√(r/(GM/r²)) = 2π√(r³/GM)
-        sorry  -- Algebraic simplification: √(r/(GM/r²)) = √(r³/GM)
+        congr
+        rw [div_div, mul_comm (G * M) (r⁻²), mul_div, mul_div_cancel_left _ (ne_of_gt hr), mul_comm, mul_one, pow_succ, mul_comm]
+        exact Real.sqrt_div (pow_nonneg (le_of_lt hr) 3) (mul_pos G_pos hM)
       rw [h_equiv]
       exact hw_eq
