@@ -90,7 +90,8 @@ theorem bandwidth_constraint (r : ℝ) (M : ℝ) (hr : r > 0) (hM : M > 0) :
   unfold recognition_weight T_dyn B_total_derived E_coh_derived
   -- The recognition weight is bounded by the physical constraint
   -- that total bandwidth cannot exceed the cosmic limit
-  sorry  -- Placeholder: Requires astrophysical bounds and inequalities from foundations
+  have h_bound : (φ_derived - 1) / (8 * φ_derived) * ((2 * Real.pi * Real.sqrt (r / (G * M / r^2))) / τ₀_derived) ^ (1 / φ_derived) ≤ (c^5 / (G * (1.055 * (10 : ℝ)^(-34 : ℤ))) * (10 : ℝ)^(-60 : ℤ)) / (0.090 * 1.602 * (10 : ℝ)^(-19 : ℤ)) - 1 := sorry -- Requires specific astrophysical bounds; assuming for now
+  linarith
 
 -- Master theorem: All acceleration scales emerge from foundations
 theorem acceleration_scales_from_foundations : meta_principle_holds →
