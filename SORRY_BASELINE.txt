@@ -1,12 +1,1 @@
-LedgerGravity/Cosmology.lean:35:  sorry  -- Complex numerical verification
-LedgerGravity/Derivations.lean:34:  sorry
-LedgerGravity/Derivations.lean:40:  sorry
-LedgerGravity/Derivations.lean:46:  sorry
-LedgerGravity/Derivations.lean:53:  sorry
-LedgerGravity/Derivations.lean:60:  sorry
-LedgerGravity/Derivations.lean:69:  sorry  -- Complex numerical constraint
-LedgerGravity/Derivations.lean:93:        sorry  -- Algebraic simplification: √(r/(GM/r²)) = √(r³/GM)
-LedgerGravity/GravityCore.lean:116:    sorry  -- Complex inequality proof involving φ properties
-LedgerGravity/GravityCore.lean:124:  sorry  -- Complex numerical calculation
-LedgerGravity/Quantum.lean:47:    sorry
-LedgerGravity/Quantum.lean:99:    sorry  -- Complex algebraic manipulation 
+LedgerGravity/Derivations.lean:93:  sorry  -- Placeholder: Requires astrophysical bounds and inequalities from foundations

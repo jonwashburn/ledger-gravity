@@ -32,7 +32,7 @@ theorem universe_age_pos : t_universe > 0 := by
 theorem cosmic_bandwidth_limit : bandwidth_cycle_bound > 0 := by
   unfold bandwidth_cycle_bound B_total_derived E_coh_derived
   -- The bandwidth cycle bound is positive from foundation-derived constants
-  sorry  -- Complex numerical verification
+  norm_num
 
 -- Hubble parameter from bandwidth
 noncomputable def H_0 : ℝ := 1 / t_universe  -- Hubble constant approximation

@@ -35,7 +35,6 @@ theorem quantum_collapse_occurs (n : ℕ) (epsilon delta_p : ℝ)
   (hn : n > 0) (heps : epsilon > 0) (hdp : delta_p > 0) :
   ∃ (threshold : ℝ), threshold > 0 ∧
   (epsilon < threshold → collapse_criterion n epsilon delta_p) := by
-  -- There exists a threshold below which collapse occurs
   use delta_p / n^2
   constructor
   · apply div_pos hdp
@@ -44,7 +43,16 @@ theorem quantum_collapse_occurs (n : ℕ) (epsilon delta_p : ℝ)
   · intro h
     unfold collapse_criterion I_coherent I_classical
     -- When epsilon is small enough, coherent information exceeds classical
-    sorry
+    simp [Real.log_div, Real.log_one, sub_zero]
+    apply le_trans
+    · apply add_le_add_left
+      apply mul_le_mul_of_nonneg_left
+      · apply Real.log_le_log
+        · exact pow_pos (Nat.cast_pos.mpr hn) 2
+        · exact lt_of_lt_of_le h (le_of_eq (div_one _))
+      · exact div_nonneg (le_of_lt heps) (Real.log_pos (by norm_num))
+    · simp [mul_comm, mul_div_assoc]
+      ring
 
 -- Born rule derivation
 theorem born_rule_optimal (c_k : ℝ) (hc : c_k ≥ 0) :
@@ -96,7 +104,8 @@ theorem information_collapse (n : ℕ) (hn : n > 1) :
         exact Nat.one_lt_cast.mpr hn
     · exact Real.log_pos (by norm_num)
   · unfold I_coherent I_classical
-    sorry  -- Complex algebraic manipulation
+    simp [Real.log_div, Real.log_one, sub_zero, mul_comm, mul_div_assoc]
+    ring
 
 -- Master theorem: Quantum mechanics emerges from foundations
 theorem quantum_from_foundations : meta_principle_holds →

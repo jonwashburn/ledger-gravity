@@ -106,14 +106,13 @@ theorem gravity_from_bandwidth (r : ℝ) (M : ℝ) (hr : r > 0) (hM : M > 0) :
   constructor
   · -- Prove w > 1
     unfold recognition_weight
-    -- The recognition weight is 1 + positive term derived from foundations
-    have h_phi : φ_derived > 1 := φ_derived_properties.1
-    have h_tau : τ₀_derived > 0 := τ₀_derived_pos
-    -- Since φ > 1, we have (φ - 1) > 0
-    -- The term (φ - 1)/(8φ) * (positive)^(1/φ) > 0
-    -- Therefore w = 1 + positive term > 1
-    -- For typical astrophysical parameters, w > 1
-    sorry  -- Complex inequality proof involving φ properties
+    apply add_lt_add_left
+    apply mul_pos
+    · apply div_pos
+      · exact sub_pos.mpr φ_derived_properties.1
+      · apply mul_pos (by norm_num) φ_derived_properties.1
+    · apply Real.rpow_pos
+      · exact div_pos (mul_pos (mul_pos (by norm_num) Real.pi_pos) (Real.sqrt_pos.mpr (div_pos (pow_pos hr 3) (mul_pos G_pos hM)))) τ₀_derived_pos
   · -- Prove equality
     rfl
 
@@ -121,7 +120,7 @@ theorem gravity_from_bandwidth (r : ℝ) (M : ℝ) (hr : r > 0) (hM : M > 0) :
 theorem cosmic_ledger_finite : B_total_derived < (10 : ℝ)^10 := by
   unfold B_total_derived
   -- The cosmic bandwidth is finite and bounded
-  sorry  -- Complex numerical calculation
+  norm_num
 
 -- Recognition events are conserved
 theorem recognition_conservation (E_in E_out : ℝ) :
