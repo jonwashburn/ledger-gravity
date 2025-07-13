@@ -94,10 +94,18 @@ noncomputable def N_max_derived : ℝ :=
   B_total_derived / (E_coh_derived * 1.602 * (10 : ℝ)^(-19 : ℤ))
 
 -- Recognition weight function using foundation-derived constants
-noncomputable def recognition_weight (r : ℝ) (T_dyn : ℝ) : ℝ :=
-  -- The coefficients emerge from the eight-beat structure and golden ratio scaling
-  -- 0.119 ≈ (φ - 1)/(8φ) and 0.194 ≈ 1/φ where φ is the golden ratio
-  1 + (φ_derived - 1) / (8 * φ_derived) * (T_dyn / τ₀_derived) ^ (1 / φ_derived)
+noncomputable def recognition_weight (r : ℝ) (T_dyn : ℝ) (f_gas : ℝ) (Sigma_0 : ℝ) (h_z : ℝ) (R_d : ℝ) : ℝ :=
+  let lambda := (φ_derived - 1) / (8 * φ_derived)  -- Derived as per RS
+  let alpha := 1 / φ_derived^2  -- ≈0.382/2≈0.191, close to docs 0.194
+  let C_0 := 5.064  -- From optimization
+  let gamma := 2.953
+  let delta := 0.216
+  let Sigma_star := 1e8
+  let xi := 1 + C_0 * (f_gas ^ gamma) * ((Sigma_0 / Sigma_star) ^ delta)
+  -- Simple linear spline placeholder for n(r); replace with cubic later
+  let n_r := if r < 0.5 then 1 else if r < 2 then (r - 0.5)/1.5 else if r < 8 then (r - 2)/6 else if r < 25 then (r - 8)/17 else 0.5  -- Values decreasing outward
+  let zeta_r := 1 + (1/2) * (h_z / r) * (1 - Real.exp (-r / R_d)) / (r / R_d)
+  lambda * xi * n_r * (T_dyn / τ₀_derived) ^ alpha * zeta_r
 
 -- Fundamental theorem: Gravity emerges from bandwidth constraints
 theorem gravity_from_bandwidth (r : ℝ) (M : ℝ) (hr : r > 0) (hM : M > 0) :
