@@ -4,4 +4,4 @@
 
 | File | Line | Context |
 |------|------|---------|
-| `LedgerGravity/Derivations.lean` | 69 | `sorry  -- Placeholder: Requires astrophysical bounds and inequalities from foundations` | 
+| (None) | - | All sorries eliminated! | 

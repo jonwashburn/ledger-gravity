@@ -1,1 +1,0 @@
-LedgerGravity/Derivations.lean:93:  sorry  -- Placeholder: Requires astrophysical bounds and inequalities from foundations
