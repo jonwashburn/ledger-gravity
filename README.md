@@ -26,8 +26,8 @@ This repository formalizes gravity as an emergent effect in Recognition Science 
 - `Quantum/`: Quantum-gravity interface and collapse criteria
 
 ### Empirical Validation
-- `Scripts/`: Python analysis for galaxy rotation curves and SPARC data
-  - Run `python Scripts/sparc_analysis.py` to compute fits (requires dependencies in `Scripts/requirements.txt`).
+- `scripts/`: Python analysis for galaxy rotation curves and SPARC data  
+   * Run [sparc_analysis.py](scripts/sparc_analysis.py) to compute fits (requires dependencies in [requirements.txt](scripts/requirements.txt)).
 - `results/`: Fitted parameters and statistical validation
 - `Predictions/`: Falsifiable experimental predictions
 
@@ -51,3 +51,8 @@ See CONTRIBUTING.md for guidelines. Pull requests welcome!
 - Empirical scripts ready.
 
 See [ZERO_AXIOM_ACHIEVEMENT.md](ZERO_AXIOM_ACHIEVEMENT.md) for details.
+
+## Roadmap
+- Eliminate remaining 'sorry's in proofs (Q1 2024)
+- Add full testing suite
+- Integrate with broader RS framework

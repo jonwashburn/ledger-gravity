@@ -93,6 +93,7 @@ noncomputable def N_max_derived : ℝ :=
   B_total_derived / (E_coh_derived * (1602 : ℝ) / (10 : ℝ) ^ (3 : ℕ) * (1 / (10 : ℝ) ^ (19 : ℕ)))
 
 -- Recognition weight function using foundation-derived constants
+/- Recognition weight: Computes the gravitational modification factor from bandwidth constraints. -/
 noncomputable def recognition_weight (r : ℝ) (T_dyn : ℝ) (f_gas : ℝ) (Sigma_0 : ℝ) (h_z : ℝ) (R_d : ℝ) : ℝ :=
   let lambda := (φ_derived - 1) / (8 * φ_derived)  -- Derived as per RS
   let alpha := 1 / φ_derived^2  -- ≈0.382/2≈0.191, close to docs 0.194
@@ -107,12 +108,14 @@ noncomputable def recognition_weight (r : ℝ) (T_dyn : ℝ) (f_gas : ℝ) (Sigm
   lambda * xi * n_r * (T_dyn / τ₀_derived) ^ alpha * zeta_r
 
 -- Fundamental theorem: Gravity emerges from bandwidth constraints
+/-! Fundamental theorem showing gravity emerges from RS bandwidth limits. -/
 theorem gravity_from_bandwidth (r : ℝ) (M : ℝ) (hr : r > 0) (hM : M > 0) :
   ∃ (w : ℝ), w > 1 ∧ w = recognition_weight r (2 * Real.pi * Real.sqrt (r^3 / (G * M))) 0.1 ((10 : ℝ) ^ (8 : ℕ)) 1 1 := by
   use recognition_weight r (2 * Real.pi * Real.sqrt (r^3 / (G * M))) 0.1 ((10 : ℝ) ^ (8 : ℕ)) 1 1
   constructor
   · -- Prove w > 1
-    sorry
+    -- TODO: Complete proof
+    sorry  -- Replace with: apply add_lt_add_left; ... (from earlier structure)
   · -- Prove equality
     rfl
 
