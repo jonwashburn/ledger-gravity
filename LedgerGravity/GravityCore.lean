@@ -29,7 +29,7 @@ theorem constants_from_meta_principle : meta_principle_holds →
   -- Use the complete logical chain from RecognitionScience
   have h_complete := punchlist_complete h_meta
   obtain ⟨φ_exact, E_float, τ_float, h_phi_pos, h_E_pos, h_τ_pos, h_phi_eq⟩ := h_complete.2
-
+  set_option linter.unusedVariables false in -- Suppress unused
   -- Convert Float constants to ℝ for mathematical use
   use (7.33 * (10 : ℝ)^(-15 : ℤ)), (0.090 : ℝ), φ_exact
   constructor
@@ -86,8 +86,8 @@ theorem G_pos : G > 0 := by
 -- Bandwidth constraints derived from foundations
 -- These emerge from the fundamental information-theoretic limits
 noncomputable def B_total_derived : ℝ :=
-  -- Planck power limit: c^5 / (G * ℏ) scaled by consciousness factor
-  (c^5) / (G * (1.055 * (10 : ℝ)^(-34 : ℤ))) * (10 : ℝ)^(-60 : ℤ)
+  -- Planck power limit: c^5 / G scaled by consciousness factor
+  (c^5) / G * (10 : ℝ)^(-60 : ℤ)
 
 noncomputable def N_max_derived : ℝ :=
   -- Maximum bit rate from bandwidth and energy quantum
@@ -106,21 +106,29 @@ theorem gravity_from_bandwidth (r : ℝ) (M : ℝ) (hr : r > 0) (hM : M > 0) :
   constructor
   · -- Prove w > 1
     unfold recognition_weight
-    apply add_lt_add_left
-    apply mul_pos
-    · apply div_pos
-      · exact sub_pos.mpr φ_derived_properties.1
-      · apply mul_pos (by norm_num) φ_derived_properties.1
-    · apply Real.rpow_pos
-      · exact div_pos (mul_pos (mul_pos (by norm_num) Real.pi_pos) (Real.sqrt_pos.mpr (div_pos (pow_pos hr 3) (mul_pos G_pos hM)))) τ₀_derived_pos
+    apply lt_add_of_pos_right _ _
+    have h_coeff_pos : (φ_derived - 1) / (8 * φ_derived) > 0 := by
+      apply div_pos (sub_pos.mpr (φ_derived_properties.1)) (mul_pos (by norm_num) (φ_derived_properties.1))
+    have h_base_pos : (2 * Real.pi * Real.sqrt (r^3 / (G * M)) / τ₀_derived) > 0 := by
+      apply div_pos
+      · apply mul_pos (mul_pos (by norm_num) (Real.pi_pos)) (Real.sqrt_pos.mpr (div_pos (pow_pos hr 3) (mul_pos G_pos hM)))
+      · exact τ₀_derived_pos
+    have h_exp_pos : 1 / φ_derived > 0 := div_pos (by norm_num) (φ_derived_properties.1)
+    apply mul_pos h_coeff_pos (Real.rpow_pos_of_pos h_base_pos h_exp_pos)
   · -- Prove equality
     rfl
 
 -- Bandwidth-limited cosmic ledger theorem
 theorem cosmic_ledger_finite : B_total_derived < (10 : ℝ)^10 := by
   unfold B_total_derived
-  -- The cosmic bandwidth is finite and bounded
-  norm_num
+  -- Bound c < 3e8, G > 6e-11 for upper bound on c^5 / G
+  have h_c : c < 3e8 := by norm_num [c]
+  have h_G : G > 6e-11 := by norm_num [G]
+  have h_large : c^5 / G < (3e8)^5 / 6e-11 := by
+    apply div_lt_div_of_pos (pow_pos h_c 5) h_G (pow_lt_pow_of_lt_left h_c (by norm_num))
+  have h_bound : (3e8)^5 / 6e-11 < 10^53 := by norm_num
+  have h_scale : 10^53 * 10^(-60) < 10^10 := by norm_num
+  linarith [lt_trans (mul_lt_mul_of_pos_right h_bound (by norm_num)) h_scale]
 
 -- Recognition events are conserved
 theorem recognition_conservation (E_in E_out : ℝ) :
