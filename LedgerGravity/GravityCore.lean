@@ -133,7 +133,7 @@ theorem cosmic_ledger_finite : B_total_derived < (10 : ℝ)^(10 : ℕ) := by
   have h_pow : c ^ 5 < (3 * (10 : ℝ) ^ 8) ^ 5 := pow_lt_pow_left h_c_bound (by linarith) (by norm_num)
   have h_div : c ^ 5 / G < (3 * (10 : ℝ) ^ 8) ^ 5 / ((6 : ℝ) / (10 : ℝ) ^ 11) := by
     apply mul_lt_mul' (le_of_lt h_pow) (one_div_lt_one_div (by norm_num) h_G_bound) (by norm_num) (by norm_num)
-  have h_calc : (3 * (10 : ℝ) ^ 8) ^ 5 / ((6 : ℝ) / (10 : ℝ) ^ 11) < (10 : ℝ) ^ 53 := by sorry -- Manual calc if needed
+  have h_calc : (3 * (10 : ℝ) ^ 8) ^ 5 / ((6 : ℝ) / (10 : ℝ) ^ 11) < (10 : ℝ) ^ 53 := by norm_num
   have h_scale : (10 : ℝ) ^ 53 / (10 : ℝ) ^ 60 < (10 : ℝ) ^ 10 := by norm_num
   linarith
 
