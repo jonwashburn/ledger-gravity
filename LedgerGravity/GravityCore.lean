@@ -90,7 +90,7 @@ noncomputable def B_total_derived : ℝ :=
 
 noncomputable def N_max_derived : ℝ :=
   -- Maximum bit rate from bandwidth and energy quantum
-  B_total_derived / (E_coh_derived * 1.602 * (10 : ℝ)^(-19 : ℤ))
+  B_total_derived / (E_coh_derived * (1602 : ℝ) / (10 : ℝ) ^ (3 : ℕ) * (1 / (10 : ℝ) ^ (19 : ℕ)))
 
 -- Recognition weight function using foundation-derived constants
 noncomputable def recognition_weight (r : ℝ) (T_dyn : ℝ) (f_gas : ℝ) (Sigma_0 : ℝ) (h_z : ℝ) (R_d : ℝ) : ℝ :=

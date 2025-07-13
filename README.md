@@ -14,7 +14,8 @@ This repository formalizes gravity as an emergent effect in Recognition Science 
 - **Born rule derivation**: Quantum collapse from information economics
 - **Testable predictions**: Pulsar timing, atom interferometry, ultra-diffuse galaxies
 
-![CI Status](https://github.com/jonwashburn/ledger-gravity/actions/workflows/new-sorry-check.yml/badge.svg?branch=main)  <!-- Trigger CI for badge -->
+[![Build Status](https://github.com/jonwashburn/ledger-gravity/workflows/CI/badge.svg)](https://github.com/jonwashburn/ledger-gravity/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Core Components
 
@@ -31,7 +32,18 @@ This repository formalizes gravity as an emergent effect in Recognition Science 
 - `Predictions/`: Falsifiable experimental predictions
 
 ### Documentation
-- `docs/`: Theoretical papers and techn
+- `docs/`: Theoretical papers and technical notes.
+
+## Getting Started
+
+1. Install Lean 4 via elan: See [leanprover-community.github.io](https://leanprover-community.github.io/install/project.html).
+2. Run `lake update` to fetch dependencies.
+3. Build with `lake build`.
+4. For scripts: `pip install -r scripts/requirements.txt` and run `python scripts/sparc_analysis.py`.
+
+## Contributing
+
+See CONTRIBUTING.md for guidelines. Pull requests welcome!
 
 ## Release v0.1.0
 - Zero axioms/sorries achieved.
