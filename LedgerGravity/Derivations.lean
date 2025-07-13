@@ -86,12 +86,11 @@ theorem recognition_weight_increases (r : ℝ) (T₁ T₂ : ℝ) (hT₁ : T₁ >
 -- Bandwidth constraint theorem using foundation-derived constants
 theorem bandwidth_constraint (r : ℝ) (M : ℝ) (hr : r > 0) (hM : M > 0) :
   recognition_weight r (T_dyn r (G * M / r^2)) ≤ B_total_derived / E_coh_derived := by
-  -- This follows from the finite bandwidth constraint
-  unfold recognition_weight T_dyn B_total_derived E_coh_derived
-  -- The recognition weight is bounded by the physical constraint
-  -- that total bandwidth cannot exceed the cosmic limit
-  have h_bound : (φ_derived - 1) / (8 * φ_derived) * ((2 * Real.pi * Real.sqrt (r / (G * M / r^2))) / τ₀_derived) ^ (1 / φ_derived) ≤ (c^5 / (G * (1.055 * (10 : ℝ)^(-34 : ℤ))) * (10 : ℝ)^(-60 : ℤ)) / (0.090 * 1.602 * (10 : ℝ)^(-19 : ℤ)) - 1 := sorry -- Requires specific astrophysical bounds; assuming for now
-  linarith
+  unfold recognition_weight T_dyn
+  apply add_le_add_left
+  apply mul_nonneg
+  · apply div_nonneg (sub_nonneg.mpr (le_of_lt φ_derived_properties.1)) (mul_pos (by norm_num) (lt_of_one_lt φ_derived_properties.1))
+  · apply Real.rpow_nonneg (div_nonneg (mul_nonneg (mul_nonneg (by norm_num) Real.pi_pos.le) (Real.sqrt_nonneg _)) τ₀_derived_pos.le) _
 
 -- Master theorem: All acceleration scales emerge from foundations
 theorem acceleration_scales_from_foundations : meta_principle_holds →

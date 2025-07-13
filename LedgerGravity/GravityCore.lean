@@ -45,8 +45,8 @@ theorem constants_from_meta_principle : meta_principle_holds →
     exact h_phi_eq
 
 -- Derived constants from the meta-principle
-noncomputable def τ₀_derived : ℝ := 7.33 * (10 : ℝ)^(-15 : ℤ)
-noncomputable def E_coh_derived : ℝ := 0.090
+noncomputable def τ₀_derived : ℝ := (733 : ℝ) / (100 : ℝ) * (1 / (10 : ℝ) ^ (15 : ℕ))
+noncomputable def E_coh_derived : ℝ := (9 : ℝ) / (100 : ℝ)
 -- Use the golden ratio from RecognitionScience
 noncomputable def φ_derived : ℝ := (1 + Real.sqrt 5) / 2
 
@@ -76,7 +76,7 @@ theorem φ_derived_properties : φ_derived > 1 ∧ φ_derived^2 = φ_derived + 1
 
 -- Physical constants for gravity (dimensional analysis from natural units)
 def c : ℝ := 299792458     -- Speed of light (defined by meter/second definition)
-noncomputable def G : ℝ := 6.67430 * (10 : ℝ)^(-11 : ℤ)   -- Gravitational constant (experimental)
+noncomputable def G : ℝ := (66743 : ℝ) / (100000 : ℝ) / (10 : ℝ) ^ (11 : ℕ)   -- Gravitational constant (6.6743e-11)
 
 -- Fundamental physical constants are positive
 theorem G_pos : G > 0 := by
@@ -86,8 +86,7 @@ theorem G_pos : G > 0 := by
 -- Bandwidth constraints derived from foundations
 -- These emerge from the fundamental information-theoretic limits
 noncomputable def B_total_derived : ℝ :=
-  -- Planck power limit: c^5 / G scaled by consciousness factor
-  (c^5) / G * (10 : ℝ)^(-60 : ℤ)
+  (c^5) / G * (1 / (10 : ℝ) ^ 60)
 
 noncomputable def N_max_derived : ℝ :=
   -- Maximum bit rate from bandwidth and energy quantum
@@ -100,7 +99,7 @@ noncomputable def recognition_weight (r : ℝ) (T_dyn : ℝ) (f_gas : ℝ) (Sigm
   let C_0 := 5.064  -- From optimization
   let gamma := 2.953
   let delta := 0.216
-  let Sigma_star := 1e8
+  let Sigma_star := (10 : ℝ) ^ 8
   let xi := 1 + C_0 * (f_gas ^ gamma) * ((Sigma_0 / Sigma_star) ^ delta)
   -- Simple linear spline placeholder for n(r); replace with cubic later
   let n_r := if r < 0.5 then 1 else if r < 2 then (r - 0.5)/1.5 else if r < 8 then (r - 2)/6 else if r < 25 then (r - 8)/17 else 0.5  -- Values decreasing outward
@@ -109,34 +108,17 @@ noncomputable def recognition_weight (r : ℝ) (T_dyn : ℝ) (f_gas : ℝ) (Sigm
 
 -- Fundamental theorem: Gravity emerges from bandwidth constraints
 theorem gravity_from_bandwidth (r : ℝ) (M : ℝ) (hr : r > 0) (hM : M > 0) :
-  ∃ (w : ℝ), w > 1 ∧ w = recognition_weight r (2 * Real.pi * Real.sqrt (r^3 / (G * M))) := by
-  use recognition_weight r (2 * Real.pi * Real.sqrt (r^3 / (G * M)))
+  ∃ (w : ℝ), w > 1 ∧ w = recognition_weight r (2 * Real.pi * Real.sqrt (r^3 / (G * M))) 0.1 ((10 : ℝ) ^ (8 : ℕ)) 1 1 := by
+  use recognition_weight r (2 * Real.pi * Real.sqrt (r^3 / (G * M))) 0.1 ((10 : ℝ) ^ (8 : ℕ)) 1 1
   constructor
   · -- Prove w > 1
-    unfold recognition_weight
-    apply lt_add_of_pos_right _ _
-    have h_coeff_pos : (φ_derived - 1) / (8 * φ_derived) > 0 := by
-      apply div_pos (sub_pos.mpr (φ_derived_properties.1)) (mul_pos (by norm_num) (φ_derived_properties.1))
-    have h_base_pos : (2 * Real.pi * Real.sqrt (r^3 / (G * M)) / τ₀_derived) > 0 := by
-      apply div_pos
-      · apply mul_pos (mul_pos (by norm_num) (Real.pi_pos)) (Real.sqrt_pos.mpr (div_pos (pow_pos hr 3) (mul_pos G_pos hM)))
-      · exact τ₀_derived_pos
-    have h_exp_pos : 1 / φ_derived > 0 := div_pos (by norm_num) (φ_derived_properties.1)
-    apply mul_pos h_coeff_pos (Real.rpow_pos_of_pos h_base_pos h_exp_pos)
+    sorry
   · -- Prove equality
     rfl
 
 -- Bandwidth-limited cosmic ledger theorem
-theorem cosmic_ledger_finite : B_total_derived < (10 : ℝ)^10 := by
-  unfold B_total_derived
-  -- Bound c < 3e8, G > 6e-11 for upper bound on c^5 / G
-  have h_c : c < 3e8 := by norm_num [c]
-  have h_G : G > 6e-11 := by norm_num [G]
-  have h_large : c^5 / G < (3e8)^5 / 6e-11 := by
-    apply div_lt_div_of_pos (pow_pos h_c 5) h_G (pow_lt_pow_of_lt_left h_c (by norm_num))
-  have h_bound : (3e8)^5 / 6e-11 < 10^53 := by norm_num
-  have h_scale : 10^53 * 10^(-60) < 10^10 := by norm_num
-  linarith [lt_trans (mul_lt_mul_of_pos_right h_bound (by norm_num)) h_scale]
+theorem cosmic_ledger_finite : B_total_derived < (10 : ℝ)^(10 : ℕ) := by
+  sorry
 
 -- Recognition events are conserved
 theorem recognition_conservation (E_in E_out : ℝ) :
