@@ -24,6 +24,7 @@ This repository formalizes gravity as an emergent effect in Recognition Science 
 
 ### Empirical Validation
 - `Scripts/`: Python analysis for galaxy rotation curves and SPARC data
+  - Run `python Scripts/sparc_analysis.py` to compute fits (requires dependencies in `Scripts/requirements.txt`).
 - `results/`: Fitted parameters and statistical validation
 - `Predictions/`: Falsifiable experimental predictions
 
