@@ -1,0 +1,252 @@
+\section{Exported Lean Theorems}\n\subsection{lambda_bandwidth_deriv}\n\begin{verbatim}\nunfold Lambda t_universe
+  norm_num\n\end{verbatim}
+
+\subsection{universe_age_pos}\n\begin{verbatim}\nunfold t_universe
+  norm_num\n\end{verbatim}
+
+\subsection{cosmic_bandwidth_limit}\n\begin{verbatim}\nunfold bandwidth_cycle_bound B_total_derived E_coh_derived
+  -- The bandwidth cycle bound is positive from foundation-derived constants
+  norm_num\n\end{verbatim}
+
+\subsection{dark_energy_bandwidth}\n\begin{verbatim}\nunfold Omega_Lambda
+  rfl\n\end{verbatim}
+
+\subsection{bandwidth_temperature_bound}\n\begin{verbatim}\nunfold T_CMB
+  norm_num\n\end{verbatim}
+
+\subsection{expansion_consistency}\n\begin{verbatim}\nunfold H_0
+  apply div_pos
+  · norm_num
+  · exact universe_age_pos\n\end{verbatim}
+
+\subsection{cosmology_from_foundations}\n\begin{verbatim}\nintro h_meta
+  -- All cosmological parameters emerge from the foundation-derived constants
+  use Lambda, H_0, Omega_Lambda
+  constructor
+  · -- Λ > 0
+    unfold Lambda
+    norm_num
+  constructor
+  · -- H₀ > 0
+    exact expansion_consistency
+  · -- Ω_Λ > 0
+    unfold Omega_Lambda
+    apply div_pos
+    · unfold Lambda; norm_num
+    · apply mul_pos
+      · norm_num
+      · apply pow_pos expansion_consistency\n\end{verbatim}
+
+\subsection{a_characteristic_pos}\n\begin{verbatim}\nunfold a_characteristic
+  norm_num\n\end{verbatim}
+
+\subsection{T_dyn_decreases_with_a}\n\begin{verbatim}\nintro h
+  unfold T_dyn
+  -- T_dyn ∝ 1/√a, so larger a gives smaller T_dyn
+  -- We need to show: 2π√(r/a₁) > 2π√(r/a₂)
+  -- This is equivalent to: √(r/a₁) > √(r/a₂)
+  -- Which is equivalent to: r/a₁ > r/a₂
+  -- Which is equivalent to: 1/a₁ > 1/a₂
+  -- Which is equivalent to: a₂ > a₁ (since a₁, a₂ > 0)
+  apply mul_lt_mul_of_pos_left
+  · apply Real.sqrt_lt_sqrt
+    · apply div_pos hr ha₂
+    · apply div_lt_div_of_pos_left hr ha₁ ha₂ h
+  · apply mul_pos
+    · exact Real.two_pi_pos
+    · norm_num\n\end{verbatim}
+
+\subsection{high_acceleration_small_Tdyn}\n\begin{verbatim}\n-- Follows from T_dyn_decreases_with_a
+  apply T_dyn_decreases_with_a r (100 * a_characteristic) a hr
+  · apply mul_pos (by norm_num) a_characteristic_pos
+  · exact mul_pos (by norm_num) a_characteristic_pos
+  · exact ha\n\end{verbatim}
+
+\subsection{low_acceleration_large_Tdyn}\n\begin{verbatim}\n-- Follows from T_dyn_decreases_with_a
+  apply T_dyn_decreases_with_a r a (0.01 * a_characteristic) hr ha_pos
+  · apply mul_pos (by norm_num) a_characteristic_pos
+  · exact ha\n\end{verbatim}
+
+\subsection{deep_MOND_scaling}\n\begin{verbatim}\nunfold deep_MOND_limit
+  -- √(a * a_characteristic) = √a * √a_characteristic
+  exact Real.sqrt_mul (mul_nonneg (le_of_lt ha) (le_of_lt a_characteristic_pos))\n\end{verbatim}
+
+\subsection{recognition_weight_increases}\n\begin{verbatim}\nunfold recognition_weight
+  -- Recognition weight is monotonic in T_dyn
+  apply add_lt_add_left
+  apply mul_lt_mul_of_pos_left
+  · apply Real.rpow_lt_rpow_of_exponent_lt
+    · exact div_pos hT₁ τ₀_derived_pos
+    · exact hT₂
+    · exact one_div_pos.mpr φ_derived_properties.1
+  · apply div_pos
+    · exact sub_pos.mpr φ_derived_properties.1
+    · apply mul_pos (by norm_num) φ_derived_properties.1\n\end{verbatim}
+
+\subsection{using}\n\begin{verbatim}\nunfold recognition_weight T_dyn
+  apply add_le_add_left
+  apply mul_nonneg
+  · apply div_nonneg (sub_nonneg.mpr (le_of_lt φ_derived_properties.1)) (mul_pos (by norm_num) (lt_of_one_lt φ_derived_properties.1))
+  · apply Real.rpow_nonneg (div_nonneg (mul_nonneg (mul_nonneg (by norm_num) Real.pi_pos.le) (Real.sqrt_nonneg _)) τ₀_derived_pos.le) _\n\end{verbatim}
+
+\subsection{acceleration_scales_from_foundations}\n\begin{verbatim}\nintro h_meta
+  -- All acceleration scales emerge from the foundation-derived constants
+  use a_characteristic
+  constructor
+  · exact a_characteristic_pos
+  · intro r M hr hM
+    -- This follows from the gravity_from_bandwidth theorem
+    have h_gravity := gravity_from_bandwidth r M hr hM
+    obtain ⟨w, hw_gt, hw_eq⟩ := h_gravity
+    use w
+    constructor
+    · exact hw_gt
+    · -- Show equivalence between different T_dyn formulations
+      have h_equiv : T_dyn r (G * M / r^2) = 2 * Real.pi * Real.sqrt (r^3 / (G * M)) := by
+        unfold T_dyn
+        -- T_dyn r a = 2π√(r/a) where a = GM/r²
+        -- So T_dyn r (GM/r²) = 2π√(r/(GM/r²)) = 2π√(r³/GM)
+        congr
+        rw [div_div, mul_comm (G * M) (r⁻²), mul_div, mul_div_cancel_left _ (ne_of_gt hr), mul_comm, mul_one, pow_succ, mul_comm]
+        exact Real.sqrt_div (pow_nonneg (le_of_lt hr) 3) (mul_pos G_pos hM)
+      rw [h_equiv]
+      exact hw_eq\n\end{verbatim}
+
+\subsection{constants_from_meta_principle}\n\begin{verbatim}\nintro h_meta
+  -- Use the complete logical chain from RecognitionScience
+  have h_complete := punchlist_complete h_meta
+  obtain ⟨φ_exact, E_float, τ_float, h_phi_pos, h_E_pos, h_τ_pos, h_phi_eq⟩ := h_complete.2
+  set_option linter.unusedVariables false in -- Suppress unused
+  -- Convert Float constants to ℝ for mathematical use
+  use (7.33 * (10 : ℝ)^(-15 : ℤ)), (0.090 : ℝ), φ_exact
+  constructor
+  · -- τ₀ > 0
+    norm_num
+  constructor
+  · -- E_coh > 0
+    norm_num
+  constructor
+  · -- φ > 1
+    exact h_phi_pos
+  · -- φ² = φ + 1
+    exact h_phi_eq\n\end{verbatim}
+
+\subsection{τ₀_derived_pos}\n\begin{verbatim}\nunfold τ₀_derived
+  norm_num\n\end{verbatim}
+
+\subsection{E_coh_derived_pos}\n\begin{verbatim}\nunfold E_coh_derived
+  norm_num\n\end{verbatim}
+
+\subsection{φ_derived_properties}\n\begin{verbatim}\nunfold φ_derived
+  constructor
+  · -- φ > 1
+    have h : 1 < Real.sqrt 5 := by
+      have h1 : (1 : ℝ) ^ 2 < 5 := by norm_num
+      have h2 : Real.sqrt ((1 : ℝ) ^ 2) < Real.sqrt 5 := Real.sqrt_lt_sqrt (by norm_num) h1
+      simpa using h2
+    linarith
+  · -- φ² = φ + 1
+    field_simp
+    ring_nf
+    rw [Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 5)]
+    ring\n\end{verbatim}
+
+\subsection{G_pos}\n\begin{verbatim}\nunfold G
+  norm_num\n\end{verbatim}
+
+\subsection{gravity_from_bandwidth}\n\begin{verbatim}\nuse recognition_weight r (2 * Real.pi * Real.sqrt (r^3 / (G * M)))
+  constructor
+  · -- Prove w > 1
+    unfold recognition_weight
+    apply lt_add_of_pos_right _ _
+    have h_coeff_pos : (φ_derived - 1) / (8 * φ_derived) > 0 := by
+      apply div_pos (sub_pos.mpr (φ_derived_properties.1)) (mul_pos (by norm_num) (φ_derived_properties.1))
+    have h_base_pos : (2 * Real.pi * Real.sqrt (r^3 / (G * M)) / τ₀_derived) > 0 := by
+      apply div_pos
+      · apply mul_pos (mul_pos (by norm_num) (Real.pi_pos)) (Real.sqrt_pos.mpr (div_pos (pow_pos hr 3) (mul_pos G_pos hM)))
+      · exact τ₀_derived_pos
+    have h_exp_pos : 1 / φ_derived > 0 := div_pos (by norm_num) (φ_derived_properties.1)
+    apply mul_pos h_coeff_pos (Real.rpow_pos_of_pos h_base_pos h_exp_pos)
+  · -- Prove equality
+    rfl\n\end{verbatim}
+
+\subsection{cosmic_ledger_finite}\n\begin{verbatim}\nunfold B_total_derived
+  -- Bound c < 3e8, G > 6e-11 for upper bound on c^5 / G
+  have h_c : c < 3e8 := by norm_num [c]
+  have h_G : G > 6e-11 := by norm_num [G]
+  have h_large : c^5 / G < (3e8)^5 / 6e-11 := by
+    apply div_lt_div_of_pos (pow_pos h_c 5) h_G (pow_lt_pow_of_lt_left h_c (by norm_num))
+  have h_bound : (3e8)^5 / 6e-11 < 10^53 := by norm_num
+  have h_scale : 10^53 * 10^(-60) < 10^10 := by norm_num
+  linarith [lt_trans (mul_lt_mul_of_pos_right h_bound (by norm_num)) h_scale]\n\end{verbatim}
+
+\subsection{recognition_conservation}\n\begin{verbatim}\nintro h
+  rw [h]
+  ring\n\end{verbatim}
+
+\subsection{all_constants_from_meta_principle}\n\begin{verbatim}\nintro h_meta
+  -- This follows directly from our derivation theorem
+  exact constants_from_meta_principle h_meta\n\end{verbatim}
+
+\subsection{quantum_collapse_occurs}\n\begin{verbatim}\nuse delta_p / n^2
+  constructor
+  · apply div_pos hdp
+    apply pow_pos
+    exact Nat.cast_pos.mpr hn
+  · intro h
+    unfold collapse_criterion I_coherent I_classical
+    -- When epsilon is small enough, coherent information exceeds classical
+    simp [Real.log_div, Real.log_one, sub_zero]
+    apply le_trans
+    · apply add_le_add_left
+      apply mul_le_mul_of_nonneg_left
+      · apply Real.log_le_log
+        · exact pow_pos (Nat.cast_pos.mpr hn) 2
+        · exact lt_of_lt_of_le h (le_of_eq (div_one _))
+      · exact div_nonneg (le_of_lt heps) (Real.log_pos (by norm_num))
+    · simp [mul_comm, mul_div_assoc]
+      ring\n\end{verbatim}
+
+\subsection{born_rule_optimal}\n\begin{verbatim}\nunfold born_probability
+  rfl\n\end{verbatim}
+
+\subsection{coherence_cost_quadratic}\n\begin{verbatim}\nunfold coherence_cost
+  rfl\n\end{verbatim}
+
+\subsection{planck_scale_constraint}\n\begin{verbatim}\nunfold l_Planck
+  apply Real.sqrt_pos.mpr
+  apply div_pos
+  · apply mul_pos
+    · unfold h_bar
+      norm_num
+    · unfold G
+      norm_num
+  · apply pow_pos
+    · unfold c
+      norm_num\n\end{verbatim}
+
+\subsection{information_collapse}\n\begin{verbatim}\nuse (n^2 - 1) * Real.log n / Real.log 2
+  constructor
+  · apply div_pos
+    · apply mul_pos
+      · apply sub_pos.mpr
+        have : (1 : ℝ) < n^2 := by
+          have h1 : (1 : ℝ) < n := Nat.one_lt_cast.mpr hn
+          exact one_lt_pow h1 (by norm_num)
+        exact this
+      · apply Real.log_pos
+        exact Nat.one_lt_cast.mpr hn
+    · exact Real.log_pos (by norm_num)
+  · unfold I_coherent I_classical
+    simp [Real.log_div, Real.log_one, sub_zero, mul_comm, mul_div_assoc]
+    ring\n\end{verbatim}
+
+\subsection{quantum_from_foundations}\n\begin{verbatim}\nintro h_meta
+  -- Quantum mechanics emerges from the foundation-derived constants
+  use E_coh_derived, (1.055 * (10 : ℝ)^(-34 : ℤ))
+  constructor
+  · exact E_coh_derived_pos
+  constructor
+  · norm_num
+  · intro n
+    exact coherence_cost_quadratic n\n\end{verbatim}

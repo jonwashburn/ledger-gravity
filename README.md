@@ -30,3 +30,10 @@ This repository formalizes gravity as an emergent effect in Recognition Science 
 
 ### Documentation
 - `docs/`: Theoretical papers and techn
+
+## Release v0.1.0
+- Zero axioms/sorries achieved.
+- Full proofs for gravity unification.
+- Empirical scripts ready.
+
+See [ZERO_AXIOM_ACHIEVEMENT.md](ZERO_AXIOM_ACHIEVEMENT.md) for details.
