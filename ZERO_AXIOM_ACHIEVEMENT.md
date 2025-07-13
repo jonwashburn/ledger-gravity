@@ -1,6 +1,6 @@
 # Zero Axiom Achievement
 
-![Build Passing](https://img.shields.io/badge/Build-Passing-green) ![Zero Axiom](https://img.shields.io/badge/Axioms-0-blue) ![Zero Sorry](https://img.shields.io/badge/Sorries-0-blue)
+![Build Passing](https://img.shields.io/badge/Build-Passing-green) ![Zero Axiom](https://img.shields.io/badge/Axioms-0-blue) ![Zero Sorry](https://img.shields.io/badge/Sorries-0-blue) ![CI Status](https://github.com/jonwashburn/ledger-gravity/actions/workflows/new-sorry-check.yml/badge.svg)
 
 This repository has achieved **zero axioms** and **zero sorries** in all core proofs. All gravitational, cosmological, and quantum phenomena are derived purely from the Recognition Science meta-principle via Lean 4.
 

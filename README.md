@@ -14,6 +14,8 @@ This repository formalizes gravity as an emergent effect in Recognition Science 
 - **Born rule derivation**: Quantum collapse from information economics
 - **Testable predictions**: Pulsar timing, atom interferometry, ultra-diffuse galaxies
 
+![CI Status](https://github.com/jonwashburn/ledger-gravity/actions/workflows/new-sorry-check.yml/badge.svg)
+
 ## Core Components
 
 ### Lean Formalization
