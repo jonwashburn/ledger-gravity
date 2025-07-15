@@ -1,24 +1,18 @@
 import Lake
 open Lake DSL
 
-package «rs» where
-  -- Recognition Science unified repository
+package «ledger-gravity» where
+  -- Ledger Gravity: Bandwidth-constrained gravity derivations
 
-lean_lib «Gravity» where
-  -- Gravity module for bandwidth-constrained gravity
-  srcDir := "Gravity"
-
-lean_lib «Particles» where
-  -- Particles module for φ-cascade mass derivations
-  srcDir := "Particles"
-
-lean_lib «Ethics» where
-  -- Ethics module for ledger-based moral reasoning
-  srcDir := "Ethics"
+lean_lib «LedgerGravity» where
+  -- Main library combining all modules
 
 @[default_target]
-lean_exe «rs» where
+lean_exe «ledger-gravity» where
   root := `Main
 
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4.git" @ "v4.11.0"
+
+require RecognitionScience from git
+  "https://github.com/jonwashburn/ledger-foundation" @ "main"
